@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorator="template"> <head>
+<meta charset="utf-8"> <title>Profil</title> </head>
+<body class="d-flex flex-column">
+	<div layout:fragment="pageContent">
+		<main class="container">
+			<div style="max-width:33rem" class="card p-3 mt-5 w-75 mx-auto">
+				<div class="card-body mx-auto">
+					
+					<p th:text="${'Pseudo : ' + user.username}"></p><br/>
+					<p th:text="${'Nom : ' + user.nom}"></p>
+					<p th:text="${'Prénom : ' + user.prenom}"></p>
+					<p th:text="${'Email : ' + user.email}"></p>
+					<p th:text="${'Téléphone : ' + user.telephone}"></p>
+					<p th:text="${'Rue : ' + user.rue}"></p>
+					<p th:text="${'Code postal : ' + user.code_postal}"></p>
+					<p th:text="${'Ville : ' + user.ville}"></p>
+				</div>
+			</div>
+		</main>
+	</div>
+</body>
+</html>

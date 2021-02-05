@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="template">
+<head>
+<meta charset="utf-8"> <title>Ajout des Articles</title> 
+</head>
+<body>
+	<div layout:fragment="pageContent"> 
+		<div class="container mt-5">
+	
+			<div class="card">
+				<div class="card-header h5" th:if="${mode == 'create'}">Ajout d'Article </div> 
+				<div class="card-header h5" th:if="${mode == 'modif'}"><span th:text="${'Modification article ' + idArticle}"></span></div> 
+				<div class="card-body">
+
+					<form th:action="@{/saveArticle}" th:object="${article}"
+						method="post" enctype="multipart/form-data">
+
+						<div class="form-group">
+							<label class="control-label" hidden>ID Article :</label> <input
+								type="hidden" readonly="readonly" name="idArticle"
+								class="form-control" th:value="${idArticle}" />
+						</div>
+
+						<div class="form-group">
+							<label class="control-label">Nom Article :</label>
+							<div
+								th:classappend="${#fields.hasErrors('nomArticle')} ? 'input-icon right' : ''">
+								<input type="text" name="nomArticle" class="form-control"
+									th:value="${nomArticle}" placeholder="Nom"
+									th:field="*{nomArticle}" /> 
+								<span th:if="${#fields.hasErrors('nomArticle')}" th:errors=*{nomArticle} class="text-danger"> </span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="categorie">Catégorie : </label> 
+							<div
+								th:classappend="${#fields.hasErrors('categorie')} ? 'input-icon right' : ''">
+							<div class="input-group">
+								<select
+									th:name="categorie" id="categorie" th:field="*{categorie}"
+									class="form-select py-2" aria-label="Categorie select">
+									<option value=""></option>
+									<option th:each="c:${categories}" th:value="${c.idCat}"	th:text="${c.idCat} +' - '+ ${c.nomCat}"></option>
+								</select>
+							</div>
+						</div>
+						</div>
+						<div class="form-group">
+							<label for="image">Photos : </label>
+							<div class="input-group mb-3">
+							 
+							  <div class="custom-file">
+							    <input type="file" class="custom-file-input" id="fileImage" name="fileImage" accept="image/png, image/jpeg, image/jpg">
+							    <label class="custom-file-label" for="fileImage">Choisissez un fichier</label>
+							  </div>
+							</div>
+							<img id="thumbnail" th:src="@{imageArticle}" />
+						</div>
+						<div class="form-group">
+							<label for="decriptionArticle">Description de l'article :
+							</label>
+							<div
+								th:classappend="${#fields.hasErrors('decriptionArticle')} ? 'input-icon right' : ''">
+							<textarea class="form-control" name="decriptionArticle"
+								id="decriptionArticle" rows="3" th:value="${decriptionArticle}"></textarea>
+						</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label">Prix de l'Article :</label> 
+							<div
+								th:classappend="${#fields.hasErrors('prixArticle')} ? 'input-icon right' : ''">
+							<input
+								type="text" name="prixArticle" class="form-control"
+								th:value="${prixArticle}" placeholder="0" /> <span
+								th:errors=*{prixArticle} class="text-danger"> </span>
+						</div>
+							</div>
+						<div>
+							<button type="submit" class="btn btn-primary">Valider</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		$(Document).ready(function(){
+			$('#fileImage').change(function(){
+				showImageThumbnail(this);
+			});
+		});
+		
+		function showImageThumbnail(fileInput){
+			file = fileInput[0];
+			reader = new FileRader();
+			alert("OkJquery");
+			reader.onload = function(e){
+				$('#thumbnail').attr('src', e.target.result);
+			};
+			reader.readAsDataURL(file);
+		}
+	</script>
+</body>
+</html>

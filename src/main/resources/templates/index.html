@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	"/Users/Marcos/Documents/workspace-sts/SpringBootApp/src/main/resources/templates/formArticle.html"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="template" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity5>
+
+<!-- 
+	<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+	<link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css} "/>
+ <link th:rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/5.15.2/css/all.min.css} "/>
+ <h:outputStylesheet library="webjars" name="/webjars/font-awesome/5.15.2/css/all.min.css" />
+-->
+<head>
+<link th:rel="stylesheet" type="text/css"
+	th:href="@{/webjars/font-awesome/5.15.2/css/all.min.css} " />
+<meta charset="utf-8">
+<title>Ajout des Articles</title>
+</head>
+<body>
+	<div layout:fragment="pageContent">
+
+		<!-- Begin page content -->
+		<main class="container flex-grow-1 pt-2 mt-4">
+
+			<!--  Form -->
+			<div class="filtres_et_recherche my-2">
+				<form action="#" method="GET">
+					<fieldset>
+						<div class="row no-gutters align-items-center">
+							<legend>Filtres : </legend>
+							<div class="filtres-inputs d-flex flex-column col-lg-6">
+								<div sec:authorize="hasAnyRole('ADMIN','MEMBER')"
+									class="form-group row order-lg-3 my-3 pl-4">
+									<div class="col-12 col-md-6 justify-content-around">
+										<input disabled type="radio" id="achats" name="categorieTransaction"
+											value="achats"> <label for="achats">Achats</label><br>
+										<div class="container">
+											<input disabled type="checkbox" id="encheresOuvertes"
+												name="encheresOuvertes" value=""> 
+											<label	for="encheresOuvertes"> Encheres ouvertes</label><br>
+											<input disabled	type="checkbox" id="mesEncheres" name="mesEncheres" value="">
+											<label  for="mesEncheres"> Mes enchères</label><br>
+											<input disabled type="checkbox" id="encheresRemportees" name="encheresRemportees" value="">
+											<label
+												for="encheresRemportees"> Enchères remportées</label><br>
+										</div>
+									</div>
+									<div class="col-12 col-md-6">
+										<input type="radio" disabled id="ventes" name="categorieTransaction"
+											value="ventes"> <label for="ventes">Mes
+											ventes</label><br>
+										<div class="container">
+											<input disabled type="checkbox" id="ventesEnCours"	name="ventesEnCours" value=""> 
+											<label for="ventesEnCours"> Ventes en cours</label><br> 
+											<input disabled type="checkbox" id="ventesNonDebutees" name="ventesNonDebutees" value="">
+											<label for="ventesNonDebutees"> Ventes non débutées</label><br>
+											<input disabled type="checkbox" id="ventesTerminees"
+												name="ventesTerminees" value="">
+											<label	for="ventesTerminees"> Ventes terminees</label><br>
+										</div>
+									</div>
+									<h3 class="text-info ml-5">Fonctionnalités à venir</h3>
+								</div>
+								<div class="form-group my-2 row gx-0 order-lg-2 ">
+									<div class="col-3">
+										<label for="categories_select">Catégories : </label>
+									</div>
+									<div class="col-9">
+										<div>
+											<select name="categories_select" id="categories_select"
+												class="form-select w-50" aria-label="Default select example">
+												<option></option>
+												<option th:each="c:${categories}" value="${c.idCat}"
+													th:text="${c.idCat} +' - '+ ${c.nomCat}"></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group my-2 order-lg-1">
+									<div class="input-group mb-3">
+										<span class="input-group-text bg-transparent border-right-0 "
+											id="article-search-span"><i class="fas fa-search"></i></span>
+										<input
+											class="input-group-text bg-transparent form-control border-left-0 "
+											type="search" id="article-search" name="article-search"
+											placeholder="Le nom de l'article contient"
+											aria-label="Recherche d'un article">
+									</div>
+								</div>
+
+							</div>
+							<div class="gx-0 text-center px-5 col-lg-6">
+								<button type="submit" class="btn btn-primary w-100 p-4 my-3">Rechercher</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+
+
+
+			<div class="mx-auto" th:if="${nbElementsPages &lt; 1}">
+				<h2 class="my-4">Aucune vente à afficher</h2>
+			</div>
+
+			<div th:if="${nbElementsPages &gt; 0}">
+				<!--  Articles -->
+				<div class="row no-gutters mb-4">
+					<div class="col-lg-6 mb-3" th:each="a:${pagesArticles.content}">
+						<div class="card px-3 mx-1 mb-2">
+							<div class="row align-items-center no-gutters card-block">
+								<div class="col-4">
+									<img class="img-fluid img-thumbnail"
+										src="https://via.placeholder.com/150/FFFF00/000000?Text=WebsiteBuilders.com"
+										alt="...">
+								</div>
+								<div class="col-8">
+									<div class="card-body">
+										<p th:text="'ID : ' + ${a.idArticle}"></p>
+										<p th:text="'Nom Article : ' + ${a.nomArticle}"></p>
+										<p th:text="'Prix : ' + ${a.prixArticle}"></p>
+										<p th:text="${a.createdAt}"></p>
+										<br/>
+										<div th:text="${'Vendeur : ' + user}"></div>
+										<p sec:authorize="hasAuthority('ADMIN')">
+											<a class="btn btn-warning"
+												th:href="@{modifierArticle(id=${a.idArticle})}">Editer</a>
+										</p>
+										<div sec:authorize="hasAnyAuthority('ADMIN', 'MEMBER')">
+											<a class="btn btn-danger"
+												onclick="return confirm('Etes-vous sûr ?')"
+												th:href="@{ /supprimerArticle(id=${a.idArticle},page=${page},size=${size})}">
+												Supprimer </a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+				<!-- / Articles -->
+			</div>
+		</main>
+		<div class="row w-100 no-gutters mt-auto justify-content-center p-2">
+			<ul class="nav nav-pills">
+				<li th:each="page,status:${pages}">
+					<a th:unless="${status.index==currentPage}"
+						th:class="${'btn' }"
+						th:href="@{ /(page=${status.index}, size=${size} ) }"
+						th:text="${status.index + 1}"> 
+					</a>
+					<a th:if="${status.index==currentPage}" th:class="${'btn btn-primary'}" th:text="${status.index + 1}">
+					</a>
+				
+				</li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
