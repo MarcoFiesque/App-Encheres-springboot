@@ -52,6 +52,11 @@ public class UserServiceImpl implements UserService {
 		
 		return userRepository.findAll(PageRequest.of(page, size));
 	}
+
+	@Override
+	public void deleteByIdUsers(Long id) {
+		userRepository.deleteById(id);;
+	}
 	
 
 }

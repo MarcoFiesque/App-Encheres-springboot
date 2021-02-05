@@ -77,6 +77,11 @@ public class User {
 	
 	private Boolean enabled;
 	
+	@OneToMany(mappedBy="user")
+	@ToString.Exclude
+	private List<Enchere> encheres;
+	
+	
 	
 	@ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER) 
 	@JoinTable(name="user_role",joinColumns = @JoinColumn(name="user_id") ,

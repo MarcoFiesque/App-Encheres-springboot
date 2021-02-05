@@ -94,6 +94,11 @@ public class Article {
 	@ManyToOne
 	@JoinColumn(name="categorieIdCat", nullable=false)
 	private Categorie categorie;
+
+	@ToString.Exclude
+	@ManyToOne
+	@JoinColumn(name="noEnchere", nullable=false)
+	private Enchere enchere;
 	
 
 }

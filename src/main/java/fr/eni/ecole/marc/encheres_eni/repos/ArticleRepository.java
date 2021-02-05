@@ -23,8 +23,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 	@Query("select a from Article a where a.nomArticle like %:nom and a.prixArticle > :prix") 
 	List<Article> findByNomPrix (@Param("nom") String nom, @Param("prix") Double prix);
 	
-	@Query("select a from Article a order by a.nomArticle ASC, a.prixArticle DESC") 
-	List<Article> trierArticlesNomsPrix ();
 
 	@Query("select a from Article a order by a.nomArticle ASC, a.prixArticle DESC") 
 	List<Article> trierArticlesByNomPrix ();
