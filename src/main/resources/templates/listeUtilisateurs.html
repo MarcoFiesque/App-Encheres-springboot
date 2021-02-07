@@ -30,7 +30,7 @@
 						</tr>
 						<tr 
 							
-							th:onclick="|window.location.href='@{/show_user(id=${u.user_id})}'|"
+							th:onclick="|window.location.href='@{/show_user/(id=${u.user_id})}'|"
 							th:each="u:${pagesUtilisateurs.content}"
 							>
 

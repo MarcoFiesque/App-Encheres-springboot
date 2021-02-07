@@ -170,7 +170,31 @@ public class AppController {
 			return "formArticle";
 
 	}
-	
+	/*
+	@PostMapping("/updateArticle")
+	public String updateArticle
+			(
+				@ModelAttribute("article") Article article, 
+				@RequestParam("categorieIdCat") Long idCat, 
+				ModelMap modelMap, 
+				Categorie categorie, 
+				BindingResult bindingResult, 
+				Principal principal
+			)
+	throws ParseException
+	{
+			
+		Categorie catChoisie = categorieService.getCategorie(idCat);
+		article.setCategorie(catChoisie);
+		article.setUpdatedAt(LocalDateTime.now());
+			
+			articleService.updateArticle(article);
+			List<Article> articles = articleService.getAllArticles();
+			modelMap.addAttribute("articles",articles);
+			return "index";
+			
+	}
+	*/
 	
 	@RequestMapping("/supprimerArticle")
 	public String supprimerArticle(
@@ -258,40 +282,41 @@ public class AppController {
 	}
 	
 	
-	@RequestMapping(value = "/show_user")
-	public String showUserProfile(Principal principal, ModelMap modelMap, @RequestParam("id") Long id) {
+	@RequestMapping("/show_user/{id}")
+	public String showUserProfile(Principal principal, ModelMap modelMap, @PathVariable("id") Long id) {
 		User userConnecte = null;
-		
 		if(principal != null) {
 			userConnecte = userService.findByUsername(principal.getName());
 			modelMap.addAttribute("userConnecte", userConnecte);
 		}
-		User profilAffiche = userService.getUser(id);
+		User profilAffiche = userService.getUser(Long.valueOf(id));
 		modelMap.addAttribute("profilAffiche", profilAffiche);
 		if(userConnecte != null && userConnecte.getUser_id() == profilAffiche.getUser_id()) {
 			profilAffiche = userConnecte;
-			modelMap.addAttribute("owner", true);
 			modelMap.addAttribute("mode", "modif");
-		}else {
-			modelMap.addAttribute("owner", false);
-			modelMap.addAttribute("mode", "consult");
-			
 		}
 		modelMap.addAttribute("user", profilAffiche);
-	
+		
+		//System.out.println("######YYYYYYYYYYYYY############");
+		//System.out.println("Principal : " + principal.getName());
+		//System.out.println("Users : ");
 		System.out.println(profilAffiche);
 		
 		return "profil";
 		
 	}
 
-	@RequestMapping("/deleteUser")
+	
+	/*
+	@RequestMapping("/supprimerProduit")
 	public String supprimerProduit(@RequestParam("id") Long id, ModelMap modelMap, @RequestParam (name="page",defaultValue = "0") int page, @RequestParam (name="size", defaultValue = "2") int size)
 	{
-		userService.deleteByIdUsers(id); 
-		return "redirect:/logout";
+		articleService.deleteArticleById(id);
+		Page<Article> prods = articleService.getAllArticlesParPage(page,size);
+		modelMap.addAttribute("produits", prods); modelMap.addAttribute("pages", new int[prods.getTotalPages()]); modelMap.addAttribute("currentPage", page); modelMap.addAttribute("size", size);
+		return "listeProduits";
 	}
-
+	*/
 	/*
 	public String saveArticle(@ModelAttribute("article") Article article, @RequestParam("date") String date, ModelMap modelMap) throws ParseException
 	{
