@@ -247,16 +247,22 @@ public class AppController {
 	}
 	
 	@RequestMapping("/modifierUser")
-	public String editerUser(@RequestParam("id") Long id, ModelMap modelMap) 
+	public String editerUser
+		(
+			@RequestParam("id") Long id, 
+			ModelMap modelMap,
+			@Valid User user,
+			BindingResult bindingResult
+		) 
 	{
-		User user = userService.getUser(id);
+		user = userService.getUser(id);
 		modelMap.addAttribute("user", user);
 		modelMap.addAttribute("mode", "modif");
 		
-		List<Role> roles = roleService.getAllRoles();
-		System.out.println("Roles :" + roles);
-		modelMap.addAttribute(roles);
-		userService.saveUser(user);
+		if(bindingResult.hasErrors()) {
+			return "/formUser";
+		}
+		
 		return "formUser";
 	}
 	
@@ -282,26 +288,36 @@ public class AppController {
 	}
 	
 	
-	@RequestMapping("/show_user/{id}")
-	public String showUserProfile(Principal principal, ModelMap modelMap, @PathVariable("id") Long id) {
+	@RequestMapping("/show_user")
+	public String showUserProfile
+		(
+			Principal principal, 
+			ModelMap modelMap,
+			@RequestParam("id") Long id
+		)
+	{
+		
 		User userConnecte = null;
+		
 		if(principal != null) {
 			userConnecte = userService.findByUsername(principal.getName());
 			modelMap.addAttribute("userConnecte", userConnecte);
 		}
-		User profilAffiche = userService.getUser(Long.valueOf(id));
+		
+		User profilAffiche = userService.getUser(id);
+		
 		modelMap.addAttribute("profilAffiche", profilAffiche);
+		
 		if(userConnecte != null && userConnecte.getUser_id() == profilAffiche.getUser_id()) {
 			profilAffiche = userConnecte;
+			modelMap.addAttribute("owner", true);
 			modelMap.addAttribute("mode", "modif");
+		}else {
+			modelMap.addAttribute("owner", false);
+			modelMap.addAttribute("mode", "consult");
 		}
 		modelMap.addAttribute("user", profilAffiche);
-		
-		//System.out.println("######YYYYYYYYYYYYY############");
-		//System.out.println("Principal : " + principal.getName());
-		//System.out.println("Users : ");
-		System.out.println(profilAffiche);
-		
+		System.out.println("utilisateur courant : " + userConnecte);
 		return "profil";
 		
 	}

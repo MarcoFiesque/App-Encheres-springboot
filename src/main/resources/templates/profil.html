@@ -19,6 +19,22 @@ layout:decorator="template"> <head>
 					<p th:text="${'Code postal : ' + user.code_postal}"></p>
 					<p th:text="${'Ville : ' + user.ville}"></p>
 				</div>
+				<div class="row no-gutters justify-content-around"  >
+					<span th:if="${mode == 'modif'}">
+						<a 
+						   th:href="@{modifierUser(id=${user.user_id})}"
+						   class="btn btn-warning">Modifier</a>
+						<a 
+						   th:if="${owner == true}"
+						   class="btn btn-danger"
+						   onclick="return confirm('Etes-vous sûr ?')"
+						   th:href="@{deleteUser(id=${user.user_id})}"
+						   >
+							Supprimer
+						</a>
+					</span>
+					<a class="btn btn-secondary" th:href="@{showUtilisateurs}">Retour</a>
+				</div>
 			</div>
 		</main>
 	</div>

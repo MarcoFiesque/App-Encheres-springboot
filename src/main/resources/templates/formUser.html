@@ -24,6 +24,9 @@
 						<div class="row mb-4 justify-content-around">
 							<div class="col-12 col-lg-5">
 								<h3>Info de connexion</h3>
+								<div class="form-group">
+									<input type="hidden" name="user_id" class="form-control" th:value="${user.user_id}"></div>
+								</div>
 								<div class="form-group" th:class="${#fields.hasErrors('username')}? has-error">
 									<label class="form-label" for="pseudo">Pseudo</label> 
 									<input type="text" id="username" name="username" class="form-control" placeholder="Pseudo" th:value="${user.username}"/>
