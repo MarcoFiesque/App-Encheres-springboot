@@ -16,11 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,49 +37,37 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long user_id;
 	
-	@Size(min = 3, max = 20, message = "Le pseudo doit contenir entre 3 et 20 caractères")
+	@Valid
 	@Column(nullable = false, length = 64, unique = true)
 	private String 	username;
-	
-	@Size(min = 3, max = 100, message = "Le mot de passe doit contenir entre 3 et 20 caractères")
+
 	@Column(nullable = false, length = 200)
 	private String password;
 	
-	@Transient
-	private String verifPassword;
-	
-	@Size(min = 3, max = 20, message = "Le nom doit contenir entre 3 et 20 caractères")
 	@Column(nullable = false, columnDefinition = "varchar(255)")
 	private String 	nom;
 	
-	@Size(min = 3, max = 20, message = "Le prenom doit contenir entre 3 et 20 caractères")
 	@Column(nullable = false, columnDefinition = "varchar(255)")
 	private String 	prenom;
 	
-	@Email
 	@Column(nullable = false, unique = true)
 	private String 	email;
 	
-	@Pattern(regexp = "(0|\\\\+33|0033)[1-9][0-9]{8}",message = "Le format du numéro de téléphone est invalide")
 	@Column(nullable = false, length = 20)
 	private String 	telephone;
 	
     @Column(columnDefinition = "integer default 100")
 	private Integer credit;
 	
-    @Size(min = 2, max = 100)
 	@Column(nullable=false, length = 200)
 	private String rue;
 	
-    @Pattern(regexp = ("[0-9]{2}[ ]?[0-9]{3}"))
 	@Column(nullable=false, length = 200)
-	private String code_postal;
+	private int code_postal;
 	
-    @Size(min = 2, max = 30)
 	@Column(nullable=false, length = 200)
 	private String ville;
 	
-    
 	@Column
 	private Boolean isAdmin = false;
 	

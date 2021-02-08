@@ -13,8 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -34,14 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	public BCryptPasswordEncoder passwordEncoder () { 
 		return new BCryptPasswordEncoder();
 	}
-	
-	@Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
-        tokenRepository.setDataSource(dataSource);
-//        tokenRepository.setCreateTableOnStartup(true);
-        return tokenRepository;
-    }
 	
 	/*@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multipartResolver() {
@@ -70,17 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers("/", "/login", "/register", "/saveUser", "/css/**", "/showUtilisateurs", "/show_user**").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 
-		http.formLogin()
-				.loginPage("/login")
-				.usernameParameter("username")
-				.defaultSuccessUrl("/", true)
-				.permitAll()
-			.and()
-			.logout().permitAll()
-			.and()
-			.rememberMe().tokenRepository(persistentTokenRepository());
-			
-		http.exceptionHandling().accessDeniedPage("/accessDenied");
+		http.formLogin().loginPage("/login")
+						.usernameParameter("username")
+						.defaultSuccessUrl("/", true);
+        http.exceptionHandling().accessDeniedPage("/accessDenied");
 	}
 	
 	@Override

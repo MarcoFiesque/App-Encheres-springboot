@@ -16,15 +16,10 @@
 <link th:rel="stylesheet" type="text/css"
 	th:href="@{/webjars/font-awesome/5.15.2/css/all.min.css} " />
 <meta charset="utf-8">
-<title>Accueil</title>
+<title>Ajout des Articles</title>
 </head>
 <body>
 	<div layout:fragment="pageContent">
-		<div class="alert alert-danger" role="alert" th:text="${error}"
-			th:if="${error}"></div>
-		<div class="alert alert-success" role="alert" th:text="${success}"
-			th:if="${success}"></div>
-		[[${session.user}]]
 
 		<!-- Begin page content -->
 		<main class="container flex-grow-1 pt-2 mt-4">
@@ -39,34 +34,31 @@
 								<div sec:authorize="hasAnyRole('ADMIN','MEMBER')"
 									class="form-group row order-lg-3 my-3 pl-4">
 									<div class="col-12 col-md-6 justify-content-around">
-										<input disabled type="radio" id="achats"
-											name="categorieTransaction" value="achats"> <label
-											for="achats">Achats</label><br>
+										<input disabled type="radio" id="achats" name="categorieTransaction"
+											value="achats"> <label for="achats">Achats</label><br>
 										<div class="container">
 											<input disabled type="checkbox" id="encheresOuvertes"
-												name="encheresOuvertes" value=""> <label
-												for="encheresOuvertes"> Encheres ouvertes</label><br> <input
-												disabled type="checkbox" id="mesEncheres" name="mesEncheres"
-												value=""> <label for="mesEncheres"> Mes
-												enchères</label><br> <input disabled type="checkbox"
-												id="encheresRemportees" name="encheresRemportees" value="">
-											<label for="encheresRemportees"> Enchères remportées</label><br>
+												name="encheresOuvertes" value=""> 
+											<label	for="encheresOuvertes"> Encheres ouvertes</label><br>
+											<input disabled	type="checkbox" id="mesEncheres" name="mesEncheres" value="">
+											<label  for="mesEncheres"> Mes enchères</label><br>
+											<input disabled type="checkbox" id="encheresRemportees" name="encheresRemportees" value="">
+											<label
+												for="encheresRemportees"> Enchères remportées</label><br>
 										</div>
 									</div>
 									<div class="col-12 col-md-6">
-										<input type="radio" disabled id="ventes"
-											name="categorieTransaction" value="ventes"> <label
-											for="ventes">Mes ventes</label><br>
+										<input type="radio" disabled id="ventes" name="categorieTransaction"
+											value="ventes"> <label for="ventes">Mes
+											ventes</label><br>
 										<div class="container">
-											<input disabled type="checkbox" id="ventesEnCours"
-												name="ventesEnCours" value=""> <label
-												for="ventesEnCours"> Ventes en cours</label><br> <input
-												disabled type="checkbox" id="ventesNonDebutees"
-												name="ventesNonDebutees" value=""> <label
-												for="ventesNonDebutees"> Ventes non débutées</label><br>
+											<input disabled type="checkbox" id="ventesEnCours"	name="ventesEnCours" value=""> 
+											<label for="ventesEnCours"> Ventes en cours</label><br> 
+											<input disabled type="checkbox" id="ventesNonDebutees" name="ventesNonDebutees" value="">
+											<label for="ventesNonDebutees"> Ventes non débutées</label><br>
 											<input disabled type="checkbox" id="ventesTerminees"
-												name="ventesTerminees" value=""> <label
-												for="ventesTerminees"> Ventes terminees</label><br>
+												name="ventesTerminees" value="">
+											<label	for="ventesTerminees"> Ventes terminees</label><br>
 										</div>
 									</div>
 									<h3 class="text-info ml-5">Fonctionnalités à venir</h3>
@@ -107,6 +99,8 @@
 				</form>
 			</div>
 
+
+
 			<div class="mx-auto" th:if="${nbElementsPages &lt; 1}">
 				<h2 class="my-4">Aucune vente à afficher</h2>
 			</div>
@@ -128,7 +122,7 @@
 										<p th:text="'Nom Article : ' + ${a.nomArticle}"></p>
 										<p th:text="'Prix : ' + ${a.prixArticle}"></p>
 										<p th:text="${a.createdAt}"></p>
-										<br />
+										<br/>
 										<div th:text="${'Vendeur : ' + user}"></div>
 										<p sec:authorize="hasAuthority('ADMIN')">
 											<a class="btn btn-warning"
@@ -145,19 +139,24 @@
 							</div>
 						</div>
 					</div>
+
+
 				</div>
 				<!-- / Articles -->
 			</div>
 		</main>
 		<div class="row w-100 no-gutters mt-auto justify-content-center p-2">
 			<ul class="nav nav-pills">
-				<li th:each="page,status:${pages}"><a
-					th:unless="${status.index==currentPage}" th:class="${'btn' }"
-					th:href="@{ /(page=${status.index}, size=${size} ) }"
-					th:text="${status.index + 1}"> </a> <a
-					th:if="${status.index==currentPage}"
-					th:class="${'btn btn-primary'}" th:text="${status.index + 1}">
-				</a></li>
+				<li th:each="page,status:${pages}">
+					<a th:unless="${status.index==currentPage}"
+						th:class="${'btn' }"
+						th:href="@{ /(page=${status.index}, size=${size} ) }"
+						th:text="${status.index + 1}"> 
+					</a>
+					<a th:if="${status.index==currentPage}" th:class="${'btn btn-primary'}" th:text="${status.index + 1}">
+					</a>
+				
+				</li>
 			</ul>
 		</div>
 	</div>

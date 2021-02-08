@@ -3,12 +3,14 @@ package fr.eni.ecole.marc.encheres_eni.security;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import fr.eni.ecole.marc.encheres_eni.entities.Role;
 import fr.eni.ecole.marc.encheres_eni.entities.User;
 import fr.eni.ecole.marc.encheres_eni.repos.RoleRepository;
 
