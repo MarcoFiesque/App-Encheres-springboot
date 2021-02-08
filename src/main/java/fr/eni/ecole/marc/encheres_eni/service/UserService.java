@@ -21,4 +21,6 @@ public interface UserService {
 	List<User> findByOrderByUsername();
 	
 	Page<User> getAllUsersParPage(int page, int size);
+	
+	void deleteByUserId(Long id);
 }

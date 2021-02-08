@@ -10,101 +10,193 @@
 </head>
 <body>
 	<div layout:fragment="pageContent">
+		<div class="alert alert-danger" role="alert" th:text="${error}"
+			th:if="${error}"></div>
 		<main
 			class="container flex-grow-1 py-4 d-flex flex-column justify-content-center">
 			<div class="card">
-				<div class="card-header h5" th:if="${mode == 'create'}">Ajout
-					utilisateur</div>
+				<div class="card-header h5" th:if="${mode == 'create'}">Ajout utilisateur</div>
 				<div class="card-header h5" th:if="${mode == 'modif'}">
 					<span th:text="${'Modification utilisateur ' + user.user_id}"></span>
 				</div>
 				<div class="card-body">
-					<form th:action="@{saveUser}" method="POST" th:object="${user}">
+					
+					<form th:action="@{/saveUser}" method="post"  th:object="${user}">
 						<!-- 2 column grid layout with text inputs for the first and last names -->
 						<div class="row mb-4 justify-content-around">
 							<div class="col-12 col-lg-5">
-								<h3>Info de connexion</h3>
+								<h3>Infos de connexion</h3>
+								
 								<div class="form-group">
-									<input type="hidden" name="user_id" class="form-control" th:value="${user.user_id}"/>
-								</div>
-								<div class="form-group" th:class="${#fields.hasErrors('username')}? has-error">
-									<label class="form-label" for="pseudo">Pseudo</label> 
-									<input type="text" id="username" name="username" class="form-control" placeholder="Pseudo" th:value="${user.username}"/>
-								</div>
-								<!-- Email input -->
-								<div class="form-group" th:class="${#fields.hasErrors('email')}? has-error">
-									<label class="form-label" for="email">Email</label> 
-									<input type="email" id="email" name="email" class="form-control" placeholder="Email"  th:value="${user.email}"/>
-										
-								</div>
-								<!-- Password input -->
-								<div class="form-group">
-									<label class="form-label" for="password">Mot de passe</label> <input
-										type="password" id="password" name="password"
-										placeholder="Mdp" class="form-control"  />
+									<input type="hidden" name="mode" th:value="${mode}" />
+									<input 
+										type="hidden" 
+										id="user_id"
+										hidden=true 
+										name="user_id" 
+										class="form-control" 
+										placeholder="user_id"
+										th:value="${user.user_id}" 
+									/>
 								</div>
 								
-								<!-- Verif Password -->
 								<div class="form-group">
-									<label class="form-label" for="verifPassword">Confirmation
-									</label> 
-									<input type="password" id="verifPassword" name="verifPassword" placeholder="Confirmer Mdp" class="form-control" />
-									
+									<label class="form-label" for="pseudo">Pseudo</label> 
+									<input 
+										type="text" 
+										id="username" 
+										name="username" 
+										class="form-control"
+										placeholder="Pseudo" 
+										th:value="${user.username}" 
+									/>
+									<span th:errors= ${user.username} class="text-danger"> </span>
+								</div>
+								
+								<!-- Email input -->
+								<div class="form-group">
+									<label class="form-label" for="email">Email</label>
+									<input 
+										type="email" 
+										id="email" 
+										name="email" 
+										class="form-control"
+										placeholder="Email" 
+										th:value="${user.email}" 
+									/>
+									<span th:errors= ${user.email} class="text-danger"> </span>
+								</div>
+								<!-- Password input -->
+									<div th:if="${mode == 'create'}" class="form-group">
+										<label class="form-label" for="password">Mot de passe</label>
+										<input 
+											type="password" 
+											id="password" 
+											name="password"
+											placeholder="Mdp" 
+											class="form-control"
+											th:value="${user.password}"
+										/>
+										<span th:errors= ${user.password} class="text-danger"> </span>
+									</div>
+	
+									<!-- Verif Password -->
+									<div th:if="${mode == 'create'}" class="form-group">
+										<label class="form-label" for="verifPassword">Confirmation</label> 
+										<input 
+											type="password" 
+											id="verifPassword" 
+											name="verifPassword"
+											placeholder="Confirmer Mdp" 
+											class="form-control" 
+											th:value="${user.password}"
+										/>
+										<span th:errors= ${user.password} class="text-danger"> </span>
+	
 								</div>
 							</div>
 							<div class="col-12 col-lg-5">
-								<h3>Profile</h3>
+								<h3>Profil</h3>
 								<div class="form-group">
-									<label class="form-label" for="nom">Nom</label> <input
-										type="text" id="nom" name="nom" class="form-control"
-										placeholder="Nom"  th:value="${user.nom}"/>
+									<label class="form-label" for="nom">Nom</label>
+									<input
+										type="text" 
+										id="nom" 
+										name="nom" 
+										class="form-control"
+										placeholder="Nom" 
+										th:value="${user.nom}" 
+									/>
+									<span th:errors= ${user.nom} class="text-danger"> </span>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="prenom">Prénom</label> <input
-										type="text" id="prenom" name="prenom" class="form-control"
-										placeholder="Prénom"  th:value="${user.prenom}"/>
+									<label class="form-label" for="prenom">Prénom</label>
+									<input
+										type="text" 
+										id="prenom" 
+										name="prenom" 
+										class="form-control"
+										placeholder="Prénom" 
+										th:value="${user.prenom}" 
+									/>
+									<span th:errors= ${user.prenom} class="text-danger"> </span>
 								</div>
 								<!-- Phone input -->
 								<div class="form-group">
-									<label class="form-label" for="telephone">Téléphone</label> <input
-										type="text" id="telephone" name="telephone"
-										class="form-control" placeholder="N° de Téléphone"  th:value="${user.telephone}"/>
-									
+									<label class="form-label" for="telephone">Téléphone</label>
+									<input
+										type="text"
+										id="telephone" 
+										name="telephone"
+										class="form-control" 
+										placeholder="N° de Téléphone"
+										th:value="${user.telephone}" 
+									/>
+									<span th:errors= ${user.telephone} class="text-danger"> </span>
+
 								</div>
 								<h3>Adresse</h3>
 								<!-- Rue input -->
 								<div class="form-group">
-									<label class="form-label" for="rue">N° et Rue</label> <input
-										type="text" id="rue" name="rue" class="form-control"
-										placeholder="numero et nom de la rue"  th:value="${user.rue}"/>
+									<label class="form-label" for="rue">N° et Rue</label>
+									<input
+										type="text" 
+										id="rue" 
+										name="rue" 
+										class="form-control"
+										placeholder="numero et nom de la rue" 
+										th:value="${user.rue}" 
+									/>
+									<span th:errors= ${user.rue} class="text-danger"> </span>
+									
 								</div>
 								<!-- Code Postal input -->
 								<div class="form-group">
 									<label class="form-label" for="code_postal">Code postal</label>
-									<input type="number" id="code_postal" name="code_postal"
-										class="form-control" placeholder="00000"  th:value="${user.code_postal}"/>
+									<input 
+										type="number" 
+										id="code_postal" 
+										name="code_postal"
+										class="form-control" 
+										placeholder="00000"
+										th:value="${user.code_postal}" 
+									/>
+									<span th:errors= ${user.code_postal} class="text-danger"> </span>
 								</div>
 								<!-- Ville -->
 								<div class="form-group">
-									<label class="form-label" for="ville">Ville</label> <input
-										type="text" id="ville" name="ville" class="form-control"
-										placeholder="ville" th:value="${user.ville}" />
+									<label class="form-label" for="ville">Ville</label> 
+									<input
+										type="text" 
+										id="ville" 
+										name="ville" 
+										class="form-control"
+										placeholder="ville" 
+										th:value="${user.ville}" 
+									/>
+									<span th:errors= ${user.ville} class="text-danger"> </span>
 								</div>
+								<div class="form-group">
+									<input type="hidden" id="mode" name="mode" class="form-control"
+										placeholder="Mode"
+										th:value="${mode == 'create' ? 'create' : 'modif'}" />
+								</div>
+
 							</div>
 							<div class="row justify-content-center w-100 mt-5">
-								<div class="col-12 col-lg-5">
+								<div class="col-12 col-lg-5 p-2">
 									<!-- Submit button -->
-									<button type="submit" class="btn btn-primary w-100">[[${mode == 'create' ? 'Créer' : 'Modifier'}]]</button>
+									<button type="submit" class="btn btn-primary w-100 ">[[${mode
+										== 'create' ? 'Créer' : 'Modifier'}]]</button>
 								</div>
-								<div class="col-12 col-lg-5">
-									<!-- Submit button -->
-									<a th:href=@{/} class="btn btn-primary w-100">Annuler</a>
+								<div class="col-12 col-lg-5 p-2">
+									<!-- Cancel button -->
+									<a th:href="@{/}" class="btn btn-primary w-100">Annuler</a>
 								</div>
 							</div>
 						</div>
 					</form>
 				</div>
-			</div>
 		</main>
 	</div>
 </body>

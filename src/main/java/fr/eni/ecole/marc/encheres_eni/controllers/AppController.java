@@ -3,7 +3,6 @@ package fr.eni.ecole.marc.encheres_eni.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -232,6 +230,7 @@ public class AppController {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	    String encodedPassword = passwordEncoder.encode(user.getPassword());
 	    String encodedVerifPassword = passwordEncoder.encode(password);
+	    System.out.println("mode du formulaire : " + modelMap.getAttribute("mode"));
 	    System.out.println(passwordEncoder.matches(password, encodedPassword));
 	    if(passwordEncoder.matches(password, encodedPassword)) {
 		    user.setPassword(encodedPassword);
@@ -266,21 +265,45 @@ public class AppController {
 		return "formUser";
 	}
 	
+	@RequestMapping("/deleteUser")
+	public String supprimerProduit
+		(
+			@RequestParam("id") Long id, 
+			@RequestParam (name="page",defaultValue = "0") int page, 
+			@RequestParam (name="size", defaultValue = "2") int size,
+			RedirectAttributes redirAttrs,
+			ModelMap modelMap
+		)
+	{
+		userService.deleteByUserId(id);
+		redirAttrs.addFlashAttribute("success", "Utilisateur supprimé !");
+		return "redirect:/logout";
+	}
+	
 	@RequestMapping("/showUtilisateurs")
 	public String listeUtilisateurs
 		(
 			ModelMap modelMap, 
 			@RequestParam (name="page",defaultValue = "0") int page, 
-			@RequestParam (name="size", defaultValue = "4") int size
+			@RequestParam (name="size", defaultValue = "4") int size,
+			Principal principal
 		)
 	{
+		if(principal != null) {
+			User userConnecte = userService.findByUsername(principal.getName());
+			modelMap.addAttribute("userConnecte", userConnecte);
+			Long idUserConnecte = userConnecte.getUser_id();
+			modelMap.addAttribute("idUserConnecte", idUserConnecte);
+			System.out.println("Id utilisateur : " + idUserConnecte);
+		}
+		
 		// Récuperation des pages d'articles
 		Page<User> pagesUtilisateurs = userService.getAllUsersParPage(page, size);
 		// Nombre d'articles
 		Long nbElementsPages = pagesUtilisateurs.getTotalElements();
-		
+
 		// Passage des pages d'articles en tant qu'attribut
-		modelMap.addAttribute("pagesUtilisateurs",pagesUtilisateurs);
+		modelMap.addAttribute("pagesUtilisateurs", pagesUtilisateurs);
 		modelMap.addAttribute("pages", new int[pagesUtilisateurs.getTotalPages()]);
 		modelMap.addAttribute("currentPage", page);
 		modelMap.addAttribute("nbElementsPages", nbElementsPages);
@@ -293,6 +316,7 @@ public class AppController {
 		(
 			Principal principal, 
 			ModelMap modelMap,
+			RedirectAttributes redirAttrs,
 			@RequestParam("id") Long id
 		)
 	{
