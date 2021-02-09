@@ -71,10 +71,10 @@ public class User {
 	@Column
 	private Boolean isAdmin = false;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="vendeur")
 	@ToString.Exclude
     private List<Article> articles;
-	
+
 	private Boolean enabled;
 	
 	

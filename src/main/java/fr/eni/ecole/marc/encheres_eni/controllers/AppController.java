@@ -3,7 +3,6 @@ package fr.eni.ecole.marc.encheres_eni.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.eni.ecole.marc.encheres_eni.entities.Article;
 import fr.eni.ecole.marc.encheres_eni.entities.Categorie;
+import fr.eni.ecole.marc.encheres_eni.entities.Enchere;
 import fr.eni.ecole.marc.encheres_eni.entities.Role;
 import fr.eni.ecole.marc.encheres_eni.entities.User;
 import fr.eni.ecole.marc.encheres_eni.service.ArticleService;
@@ -109,7 +108,7 @@ public class AppController {
 		// Récuperation des categories
 		modelMap.addAttribute("mode", "create");
 		modelMap.addAttribute("categories", categorieService.getAllCategories());
-		
+		modelMap.addAttribute(article);
 		User userConnecte = userService.findByUsername(principal.getName());
 
 		if(bindingResult.hasErrors()) return "formArticle";
@@ -131,11 +130,20 @@ public class AppController {
 		Categorie catChoisie = categorieService.getCategorie(idCat);
 		article.setCategorie(catChoisie);
 		article.setCreatedAt(LocalDateTime.now());
-		article.setUser(userConnecte);
+		article.setVendeur(userConnecte);
 		
 				
 		articleService.saveArticle(article);
-		return "formArticle";
+		Enchere enchere = new Enchere();
+		
+		modelMap.addAttribute(enchere);
+		return "redirect:ouvertureEnchere";
+	}
+	
+	@RequestMapping("ouvertureEnchere")
+	public String debutEnchere(ModelMap modelMap) {
+		System.out.println(modelMap.getAttribute("article"));
+		return "enchere";
 	}
 	
 	@RequestMapping("/modifierArticle")
@@ -322,6 +330,15 @@ public class AppController {
 		
 	}
 
+	// Encheres
+	
+//	@RequestMapping("/createAuction")
+//	public String newEnchere() {
+//		
+//		
+//		
+//		return null;
+//	}
 	
 	/*
 	@RequestMapping("/supprimerProduit")

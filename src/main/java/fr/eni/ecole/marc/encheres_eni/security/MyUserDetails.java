@@ -36,12 +36,13 @@ this.username = user.getUsername();
 this.password = user.getPassword();
 this.enabled = user.getEnabled();
 this.user = user;
+
 }
 
 @Override
 public Collection<? extends GrantedAuthority> getAuthorities() {
 	List<GrantedAuthority> auths = new ArrayList<>();
-
+	
 	this.user.getRoles().forEach(role -> {
 	GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+role.getName());
 	auths.add(authority);

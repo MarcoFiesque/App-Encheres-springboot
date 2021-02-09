@@ -1,8 +1,8 @@
 package fr.eni.ecole.marc.encheres_eni.entities;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -67,14 +66,14 @@ public class Article {
 	@Column(nullable = true, length = 64)
     private String imageArticle;
 
-	@Transient
+	/*@Transient
 	public String getImageArticlePath() {
 		if (imageArticle == null || idArticle == null)
 			return null;
 
 		return "/user-photos/" + idArticle + "/" + imageArticle;
 	}
-	
+	*/
 	@Column(name="created_at")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@PastOrPresent
@@ -86,9 +85,14 @@ public class Article {
 	private LocalDateTime updatedAt;
 	
 	@ToString.Exclude
+	@OneToOne(mappedBy = "article", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+	private Enchere enchere;
+	
+	@ToString.Exclude
 	@ManyToOne
-	@JoinColumn(name="user_id", nullable=false)
-	private User user;
+	@JoinColumn(name="vendeur", nullable=false)
+	private User vendeur;
 	
 	@ToString.Exclude
 	@ManyToOne
